@@ -1,3 +1,21 @@
+#NOTES:
+
+building for development:
+
+make run
+
+THEN:
+
+DIST_DIR=/opt/gstreamer-dist-master
+export PKG_CONFIG_PATH=$DIST_DIR/lib/pkgconfig
+./autogen.sh --prefix=$DIST_DIR --disable-gtk-doc --disable-oss4 
+
+cd tester
+./make.sh
+./scripts/setup_testbed.sh
+
+
+
 # gstreamer + gstreamer-vaapi docker image for Intel Quick Sync decode/encode/vpp processing
 
 ## For starting need to run following command:
