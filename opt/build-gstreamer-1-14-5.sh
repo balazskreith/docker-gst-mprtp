@@ -1,9 +1,11 @@
 #!/bin/bash 
 set -e
 
-#change 'master' to '1.8' if you want to build stable gstreamer branch
+#It is necessary to run the tester inside of the gst-mprtp
+pip3 install numpy==1.16
+pip3 install matplotlib==2.2.4
+
 GST_BRANCH="master"
-MPRTP_BRANCH="master"
 
 GSTREAMER_COMMIT=latest
 DIST_DIR=/opt/gstreamer-dist-$GST_BRANCH
@@ -20,12 +22,13 @@ cd $BUILD_DIR
 [ ! -d gst-plugins-bad ] && git clone -b $GST_BRANCH git://anongit.freedesktop.org/git/gstreamer/gst-plugins-bad
 [ ! -d gst-plugins-ugly ] && git clone -b $GST_BRANCH git://anongit.freedesktop.org/git/gstreamer/gst-plugins-ugly
 [ ! -d gst-libav ] && git clone -b $GST_BRANCH git://anongit.freedesktop.org/git/gstreamer/gst-libav
-#[ ! -d gstreamer-mprtp ] && git clone -b $MPRTP_BRANCH https://github.com/balazskreith/gst-mprtp
+#[ ! -d gstreamer-mprtp ] && git clone -b https://github.com/balazskreith/gst-mprtp
 [ ! -d drm ] && git clone http://anongit.freedesktop.org/git/mesa/drm.git
 [ ! -d libva ] && git clone http://anongit.freedesktop.org/git/libva.git
 [ ! -d intel-driver ] && git clone http://anongit.freedesktop.org/git/vaapi/intel-driver.git
 
 export PKG_CONFIG_PATH=$DIST_DIR/lib/pkgconfig
+#export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
 
 #unset intel media sdk variables
 unset LIBVA_DRIVERS_PATH
@@ -49,9 +52,12 @@ do
   echo "Setup $prj"
   cd $prj;
   if [ ${commits[$prj]+_} ]; then git checkout ${commits[$prj]}; else echo "We use the latest commit"; fi
-  (./autogen.sh --prefix=$DIST_DIR --disable-gtk-doc --disable-oss4 && make -j 4 && make -j 4 install)
+   (./autogen.sh --prefix=$DIST_DIR --disable-gtk-doc --disable-oss4 && make -j 4 && make -j 4 install)
+#  (./autogen.sh --disable-gtk-doc --disable-oss4 && make -j 4 && make -j 4 install)
   cd ..
 done
 
 echo "environment settings:"
 echo "export PKG_CONFIG_PATH=$DIST_DIR/lib/pkgconfig"
+echo "export GST_PLUGIN_PATH=$DIST_DIR/lib"
+#echo "export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig"
