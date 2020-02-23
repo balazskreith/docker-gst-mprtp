@@ -1,8 +1,10 @@
 NAME = gst-mprtp-docker
 VERSION = 0.0.1
-GST_MPRTP = gst-mprtp-clone
+GST_MPRTP = gst-mprtp
+DEVELOP_DIR=/opt/gstreamer-build-master/dev-gst-mprtp
 TARGET_DIR=/opt/gstreamer-build-master/gst-mprtp
 SOURCE_DIR=~/github/docker-gst-mprtp
+
 
 .PHONY: all build 
 
@@ -31,9 +33,7 @@ clone:
 #    		./scripts/setup_testbed.sh
 
 enter:
-	docker run --privileged -v ~/github/docker-gst-mprtp/opt:/opt/scripts -p 8080:80 -it $(NAME) /bin/bash
-	# docker run --privileged -v gst-mprtp-clone:/opt/gstreamer-build-master/gst-mprtp -p 8080:80 -it $(NAME) /bin/bash
-	#docker run --privileged -v ~/github/gst-mprtp/:/opt/gstreamer-build-master/gst-mprtp -p 8080:80 -it $(NAME) /bin/bash
+	docker run --privileged -v ${SOURCE_DIR}:${DEVELOP_DIR} -p 8080:80 -it $(NAME) /bin/bash
 
 		
 run:
