@@ -14,7 +14,7 @@ build:
 	docker build -t $(NAME) .
 
 clone:
-	git clone https://github.com/balazskreith/gst-mprtp ${GST_MPRTP} && \
+	git clone --recurse-submodules -b master https://github.com/balazskreith/gst-mprtp ${GST_MPRTP} && \
 	echo "gst-mprtp is checked out to ${GST_MPRTP}";
 	
 	echo "Checking out files with git-lfs" && \
@@ -33,7 +33,7 @@ clone:
 #    		./scripts/setup_testbed.sh
 
 enter:
-	docker run --privileged -v ${SOURCE_DIR}:${DEVELOP_DIR} -p 8080:80 -it $(NAME) /bin/bash
+	docker run --privileged -v ${SOURCE_DIR}/${GST_MPRTP}:${DEVELOP_DIR} -p 8080:80 -it $(NAME) /bin/bash
 
 		
 run:

@@ -56,7 +56,13 @@ mounted to the docker container as you entered. If you have not changed the
 cd /opt/gstreamer-build-master/dev-gst-mprtp
 ```
 
-If you want to install the plugin after your change run:
+At the first time when you enterring to the development folder in the container type
+```shell script
+export PKG_CONFIG_PATH=/opt/gstreamer-dist-master/lib/pkgconfig
+./autogen.sh --prefix=/opt/gstreamer-dist-master --disable-gtk-doc --disable-oss4 && make -j 4 && make -j 4 install
+```
+
+You need to install the plugin, before you run.
 
 ```shell script
 make install
